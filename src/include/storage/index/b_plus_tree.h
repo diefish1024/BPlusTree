@@ -145,6 +145,14 @@ class BPlusTree {
    */
   auto ToPrintableBPlusTree(page_id_t root_id) -> PrintableBPlusTree;
 
+  // Helpers for Remove (redistribute / merge). They dispatch internally on
+  // whether the involved pages are leaf or internal pages.
+  auto GetChildIndex(InternalPage *parent, page_id_t child_id) -> int;
+  void BorrowFromLeft(BPlusTreePage *node, BPlusTreePage *left, InternalPage *parent, int node_index);
+  void BorrowFromRight(BPlusTreePage *node, BPlusTreePage *right, InternalPage *parent, int node_index);
+  void MergeNodes(BPlusTreePage *left, BPlusTreePage *right, InternalPage *parent, int right_index);
+  void RemoveFromInternal(InternalPage *parent, int index);
+
   // member variable
   std::string index_name_;
   BufferPoolManager *bpm_;
